@@ -10,15 +10,17 @@ export class HomePage {
     constructor(page: Page) {
         this.page = page;
 
-        this.searchInput = page.getByPlaceholder(/search/i);
+        this.searchInput = page.getByPlaceholder(/search imdb|search/i);
 
         this.searchButton = page.getByRole('button', {
-            name: /search/i
+            name: /submit search|search/i
         });
 
-        this.navigationDrawer = page.getByText('Menu');
+        this.navigationDrawer = page.getByLabel('Open navigation drawer');
 
-        this.top250MoviesLink = page.getByLabel('Go to Top 250 movies');
+        this.top250MoviesLink = page.getByRole('link', {
+            name: /top 250/i
+        }).first();
     }
 
     async navigate(): Promise<void> {
@@ -31,7 +33,19 @@ export class HomePage {
     }
 
     async goToTop250Movies(): Promise<void> {
-        await this.navigationDrawer.click();
-        await this.top250MoviesLink.click();
+        const drawerVisible = await this.navigationDrawer.isVisible().catch(() => false);
+
+        if (drawerVisible) {
+            await this.navigationDrawer.click();
+        }
+
+        const top250LinkVisible = await this.top250MoviesLink.isVisible().catch(() => false);
+
+        if (top250LinkVisible) {
+            await this.top250MoviesLink.click();
+            return;
+        }
+
+        await this.page.goto('/chart/top/?ref_=chttp_nv_tp_1');
     }
 }
