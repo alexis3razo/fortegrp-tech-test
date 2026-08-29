@@ -26,10 +26,21 @@ export default defineConfig({
 
     projects: [
         {
+            name: 'setup',
+            testMatch: /.*\.setup\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                headless: false,
+            },
+        },
+
+        {
             name: 'chromium',
             use: {
                 ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/imdb.json',
             },
+            dependencies: ['setup'],
         },
     ],
 });

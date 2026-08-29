@@ -1,2 +1,6 @@
 TestCaseId,MovieTitle,ShouldRun
 TC01,Inception,true
+TC02,Forest Gump,true
+TC03,The Dark Knight,false
+TC04,The Godfather,true
+TC05,The Shawshank Redemption,true
